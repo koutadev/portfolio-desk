@@ -130,6 +130,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .w-work-btn:hover { transform: translateY(-3px); }
 .w-thumb { width: 100%; aspect-ratio: 4 / 3; border-radius: 8px; display: grid; place-items: center; }
 .w-thumb span { width: 60%; height: 54%; border-radius: 6px; background: #FFFFFF; box-shadow: 0 6px 14px rgba(0,0,0,.12); }
+/* スクリーンショットがある作品：色の背景に、画面の左上を窓のように切り出して見せる */
+.w-thumb.has-shot, .c-hero.has-shot { padding: 12px 0 0 12px; overflow: hidden; place-items: stretch; }
+.c-hero.has-shot { aspect-ratio: 16 / 9; padding: 20px 0 0 20px; }
+.w-thumb.has-shot img, .c-hero.has-shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; border-radius: 6px 0 0 0; box-shadow: 0 8px 20px rgba(0,0,0,.16); }
 .w-work-title { font-size: 13px; font-weight: 700; line-height: 1.5; }
 .w-work-kind { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--mut); }
 
