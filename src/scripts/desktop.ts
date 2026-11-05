@@ -312,9 +312,14 @@ export function initDesktop(): void {
   const form = $<HTMLFormElement>('#contact-form');
   const doneBox = $('#contact-done');
   function setErr(input: HTMLElement | null, msgId: string, on: boolean): void {
-    if (input) input.setAttribute('aria-invalid', String(on));
+    if (input) { input.setAttribute('aria-invalid', String(on)); input.closest('.m-row')?.classList.toggle('is-invalid', on); }
     const m = document.getElementById(msgId); if (m) m.hidden = !on;
   }
+  // 直したらその場でエラー表示を消す（送信を押すまで赤いまま残さない）
+  ([['f-name', 'f-name-err'], ['f-mail', 'f-mail-err'], ['f-msg', 'f-msg-err']] as const).forEach(([id, err]) => {
+    const el = document.getElementById(id);
+    el?.addEventListener('input', () => { if (el.getAttribute('aria-invalid') === 'true') setErr(el, err, false); });
+  });
   function resetContact(): void { if (form && doneBox) { form.reset(); form.hidden = false; doneBox.hidden = true; } }
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -330,7 +335,9 @@ export function initDesktop(): void {
     const sendErr = $('#f-send-err');
     const btn = $<HTMLButtonElement>('#f-submit');
     if (sendErr) sendErr.hidden = true;
-    if (btn) { btn.disabled = true; btn.textContent = '送信しています…'; }
+    const btnLabel = $('#f-submit-label');
+    if (btn) btn.disabled = true;
+    if (btnLabel) btnLabel.textContent = '送信中…';
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -353,7 +360,8 @@ export function initDesktop(): void {
         sendErr.hidden = false;
       }
     } finally {
-      if (btn) { btn.disabled = false; btn.textContent = '送信する'; }
+      if (btn) btn.disabled = false;
+      if (btnLabel) btnLabel.textContent = '送信';
     }
   });
 
