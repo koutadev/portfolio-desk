@@ -53,7 +53,7 @@ Vercel の Project Settings → Environment Variables に次を設定します�
 
 1. Vercel で「Add New → Project」から、この GitHub リポジトリを読み込む（Framework は Astro が自動で選ばれる）
 2. 上の環境変数を設定
-3. デプロイ後、`astro.config.mjs` の `site` を公開 URL に変えてコミット
+3. 公開 URL（https://portfolio-desk-chi.vercel.app）は `astro.config.mjs` の `site` に設定済み。ドメインを変えたらここも変える
 4. 以後は、ブランチに push するとプレビュー URL、`main` に入れると本番に反映される
 
 ## 作りの要点
