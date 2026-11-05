@@ -14,19 +14,22 @@ const { id, title, label, x, y, w } = Astro.props;
   aria-labelledby={`wt-${id}`}
   style={`left:${x}px;top:${y}px;width:${w}px`}
 >
+  <!-- Mac と同じく、閉じる（赤）・しまう（黄）を左上に置き、タイトルは中央 -->
   <div class="d-titlebar">
+    <div class="d-lights">
+      <button type="button" class="d-tb d-tb-close" data-act="close" aria-label={`「${label}」を閉じる`}>
+        <span class="d-light"><svg aria-hidden="true" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M1.5 1.5l5 5M6.5 1.5l-5 5" /></svg></span>
+      </button>
+      <button type="button" class="d-tb d-tb-min" data-act="min" aria-label={`「${label}」をドックにしまう`}>
+        <span class="d-light"><svg aria-hidden="true" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M1.2 4h5.6" /></svg></span>
+      </button>
+    </div>
     <h2>
       <button type="button" class="d-drag" id={`wt-${id}`} aria-describedby="d-move-desc">
         <svg class="d-grip" aria-hidden="true" width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="2" cy="2" r="1.3" /><circle cx="8" cy="2" r="1.3" /><circle cx="2" cy="7" r="1.3" /><circle cx="8" cy="7" r="1.3" /><circle cx="2" cy="12" r="1.3" /><circle cx="8" cy="12" r="1.3" /></svg>
         <span class="d-win-title">{title}</span>
       </button>
     </h2>
-    <button type="button" class="d-tb d-tb-min" data-act="min" aria-label={`「${label}」をドックにしまう`}>
-      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 10h8" /></svg>
-    </button>
-    <button type="button" class="d-tb d-tb-close" data-act="close" aria-label={`「${label}」を閉じる`}>
-      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8" /></svg>
-    </button>
   </div>
   <div class="d-win-body">
     <slot />

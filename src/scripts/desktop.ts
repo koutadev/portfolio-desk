@@ -68,6 +68,8 @@ export function initDesktop(): void {
     y = Math.max(0, Math.min(r.height - 160, y));
     w.style.left = Math.round(x) + 'px';
     w.style.top = Math.round(y) + 'px';
+    // 画面の高さに収まらないときは、ドックの上で止めて中をスクロールさせる
+    w.style.maxHeight = Math.max(240, Math.round(r.height - y - 96)) + 'px';
   }
 
   function focusTitle(id: string): void {
@@ -76,16 +78,17 @@ export function initDesktop(): void {
   }
 
   // ---------- 開く・閉じる・しまう ----------
-  function openWin(id: string, slug?: string): void {
+  // focus=false は読み込み直後に開くとき（フォーカス枠を出さない）
+  function openWin(id: string, slug?: string, focus = true): void {
     if (!wins.has(id)) return;
     hideHint();
     if (id === 'case' && slug) showCase(slug);
-    if (open.has(id)) { front(id); focusTitle(id); return; }
+    if (open.has(id)) { front(id); if (focus) focusTitle(id); return; }
     place(id);
     open.add(id);
     stack = stack.filter((x) => x !== id).concat(id);
     render();
-    focusTitle(id);
+    if (focus) focusTitle(id);
     say(labelOf(id) + 'を開きました');
   }
 
@@ -360,9 +363,9 @@ export function initDesktop(): void {
   // ---------- 最初の状態 ----------
   const params = new URLSearchParams(location.search);
   const narrow = desk.getBoundingClientRect().width <= 820;
-  if (params.get('case')) openWin('case', params.get('case') as string);
-  else if (params.get('open')) openWin(params.get('open') as string);
-  else if (!narrow) { openWin('about'); openWin('works'); hideHint(); const h = $('#d-hint'); if (h) h.hidden = false; }
+  if (params.get('case')) openWin('case', params.get('case') as string, false);
+  else if (params.get('open')) openWin(params.get('open') as string, undefined, false);
+  else if (!narrow) { openWin('about', undefined, false); openWin('works', undefined, false); hideHint(); const h = $('#d-hint'); if (h) h.hidden = false; }
   render();
 }
 
