@@ -125,7 +125,9 @@ const description = `${profile.handle}（${profile.role}）のポートフォリ
                   {works.map((w) => (
                     <li>
                       <a class="w-work-btn" href={`/works/${w.slug}/`} data-case={w.slug} style="text-decoration:none">
-                        <span class="w-thumb" style={`background:${w.thumb}`} aria-hidden="true"><span></span></span>
+                        {w.shot
+                          ? <span class="w-thumb has-shot" style={`background:${w.thumb}`}><img src={w.shot.src} alt="" loading="lazy" decoding="async" /></span>
+                          : <span class="w-thumb" style={`background:${w.thumb}`} aria-hidden="true"><span></span></span>}
                         <span class="w-work-title">{w.title}</span>
                         <span class="w-work-kind">{w.kind}</span>
                       </a>
@@ -139,7 +141,9 @@ const description = `${profile.handle}（${profile.role}）のポートフォリ
             <Win id="case" title="作品" label="作品" x={660} y={90} w={600}>
               {works.map((w) => (
                 <article class="w-pad" data-case-panel={w.slug} aria-label={w.title}>
-                  <div class="c-hero" style={`background:${w.thumb}`} aria-hidden="true"><div><i></i><i></i><i></i></div></div>
+                  {w.shot
+                    ? <div class="c-hero has-shot" style={`background:${w.thumb}`}><img src={w.shot.src} alt={w.shot.alt} loading="lazy" decoding="async" /></div>
+                    : <div class="c-hero" style={`background:${w.thumb}`} aria-hidden="true"><div><i></i><i></i><i></i></div></div>}
                   <div>
                     <p class="c-kind">{w.kind}　·　{w.role}</p>
                     <p class="c-title">{w.title}</p>

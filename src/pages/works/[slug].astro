@@ -22,6 +22,9 @@ const next = works[(i + 1) % works.length];
     .wp-hero div { width: 52%; padding: 18px; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(0,0,0,.12); display: flex; flex-direction: column; gap: 9px; }
     .wp-hero i { display: block; height: 10px; border-radius: 3px; background: #D9DDDB; }
     .wp-hero i:first-child { width: 40%; background: #15191C; }
+    /* スクリーンショットがある作品：色の背景に、画面の左上を窓のように切り出して見せる */
+    .wp-hero.has-shot { aspect-ratio: 16 / 9; padding: 28px 0 0 28px; overflow: hidden; place-items: stretch; }
+    .wp-hero.has-shot img { width: 100%; height: 100%; object-fit: cover; object-position: left top; border-radius: 10px 0 0 0; box-shadow: 0 14px 30px rgba(0,0,0,.18); }
     .wp-hero i:last-child { width: 46%; height: 24px; border-radius: 999px; background: #2B44F5; }
     .wp-kind { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #4F575C; }
     .wp h1 { margin: 4px 0 0; font-size: clamp(28px, 5vw, 44px); line-height: 1.3; }
@@ -44,7 +47,9 @@ const next = works[(i + 1) % works.length];
       <a href={`/works/${next.slug}/`}>次の作品：{next.title} →</a>
     </nav>
     <main style="display:flex;flex-direction:column;gap:28px">
-      <div class="wp-hero" style={`background:${work.thumb}`} aria-hidden="true"><div><i></i><i></i><i></i></div></div>
+      {work.shot
+        ? <div class="wp-hero has-shot" style={`background:${work.thumb}`}><img src={work.shot.src} alt={work.shot.alt} decoding="async" /></div>
+        : <div class="wp-hero" style={`background:${work.thumb}`} aria-hidden="true"><div><i></i><i></i><i></i></div></div>}
       <header>
         <p class="wp-kind">{work.kind}　·　{work.role}</p>
         <h1>{work.title}</h1>
