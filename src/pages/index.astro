@@ -91,18 +91,25 @@ const description = `${profile.handle}（${profile.role}）のポートフォリ
             <p class="sr" id="d-move-desc">矢印キーで移動、Shift と一緒に押すと大きく移動します。</p>
 
             <!-- はじめに -->
-            <Win id="about" title="はじめに.txt" label="はじめに" x={150} y={50} w={540}>
-              <div class="w-pad">
-                <p class="w-lead">{profile.handle}<br /><span>{profile.role}</span></p>
-                <p style="margin:0">{profile.lead}</p>
-                <p class="w-h">経歴</p>
-                <dl class="w-dl">
-                  {profile.experience.map((e) => (<><dt>{e.term}</dt><dd>{e.body}</dd></>))}
-                </dl>
-                <p class="w-h">得意なこと</p>
-                <ul class="w-list">
-                  {profile.strengths.map((s) => <li><b>{s.title}</b>{s.body}</li>)}
-                </ul>
+            <Win id="about" title="はじめに.txt" label="はじめに" x={150} y={40} w={580}>
+              <div class="w-pad w-about">
+                <header>
+                  <p class="a-name">{profile.handle}</p>
+                  <p class="a-role">{profile.role}</p>
+                  <p class="a-lead">{profile.lead}</p>
+                </header>
+                <section aria-labelledby="a-h-exp">
+                  <h3 class="w-h" id="a-h-exp">経歴</h3>
+                  <ul class="a-tl">
+                    {profile.experience.map((e) => <li><p class="a-term">{e.term}</p><p>{e.body}</p></li>)}
+                  </ul>
+                </section>
+                <section aria-labelledby="a-h-str">
+                  <h3 class="w-h" id="a-h-str">得意なこと</h3>
+                  <ul class="a-str">
+                    {profile.strengths.map((s) => <li><p class="a-term">{s.title}</p><p>{s.body}</p></li>)}
+                  </ul>
+                </section>
                 <div class="w-btns">
                   <button type="button" class="btn btn-primary" data-open="works">制作物を開く</button>
                   <button type="button" class="btn" data-open="trash">削ったことを見る</button>
