@@ -1,0 +1,62 @@
+---
+// 作品ごとのページ（応募のときに作品単体の URL を送れるように）
+import Base from '../../layouts/Base.astro';
+import { works, profile } from '../../data/site';
+import type { Work } from '../../data/site';
+
+export function getStaticPaths() {
+  return works.map((w) => ({ params: { slug: w.slug }, props: { work: w } }));
+}
+interface Props { work: Work }
+const { work } = Astro.props;
+const i = works.findIndex((w) => w.slug === work.slug);
+const next = works[(i + 1) % works.length];
+---
+<Base title={`${work.title} — ${profile.handle}`} description={work.summary} bodyClass="wp">
+  <style is:global>
+    body.wp { background: #F3F4F1; color: #15191C; }
+    .wp-wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; display: flex; flex-direction: column; gap: 28px; }
+    .wp-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; }
+    .wp-top a { font-weight: 700; text-decoration: none; }
+    .wp-hero { aspect-ratio: 16 / 7; border-radius: 16px; display: grid; place-items: center; }
+    .wp-hero div { width: 52%; padding: 18px; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(0,0,0,.12); display: flex; flex-direction: column; gap: 9px; }
+    .wp-hero i { display: block; height: 10px; border-radius: 3px; background: #D9DDDB; }
+    .wp-hero i:first-child { width: 40%; background: #15191C; }
+    .wp-hero i:last-child { width: 46%; height: 24px; border-radius: 999px; background: #2B44F5; }
+    .wp-kind { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #4F575C; }
+    .wp h1 { margin: 4px 0 0; font-size: clamp(28px, 5vw, 44px); line-height: 1.3; }
+    .wp h2 { margin: 0 0 10px; font-size: 18px; }
+    .wp dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 20px; }
+    .wp dt { font-weight: 700; color: #4F575C; }
+    .wp dd { margin: 0; }
+    .wp ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .wp li b { display: block; }
+    .wp-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .wp-btn { min-height: 48px; padding: 0 20px; border: 1px solid #15191C; border-radius: 8px; display: inline-flex; align-items: center; font-weight: 700; text-decoration: none; background: #fff; }
+    .wp-btn-primary { background: #2B44F5; border-color: #2B44F5; color: #fff; }
+    .wp-soon { min-height: 48px; padding: 0 18px; border: 1px dashed #B9BFBC; border-radius: 8px; display: inline-flex; align-items: center; color: #4F575C; }
+    .wp-trash li { padding: 14px 16px; border-radius: 10px; background: #fff; }
+    .wp a:focus-visible { outline: 3px solid #2B44F5; outline-offset: 2px; }
+  </style>
+  <div class="wp-wrap">
+    <nav class="wp-top" aria-label="移動">
+      <a href="/">← {profile.handle} のデスクトップへ</a>
+      <a href={`/works/${next.slug}/`}>次の作品：{next.title} →</a>
+    </nav>
+    <main style="display:flex;flex-direction:column;gap:28px">
+      <div class="wp-hero" style={`background:${work.thumb}`} aria-hidden="true"><div><i></i><i></i><i></i></div></div>
+      <header>
+        <p class="wp-kind">{work.kind}　·　{work.role}</p>
+        <h1>{work.title}</h1>
+      </header>
+      <p style="margin:0;font-size:17px">{work.summary}</p>
+      <section><h2>概要</h2><dl><dt>使用技術</dt><dd>{work.stack.join('、')}</dd><dt>担当範囲</dt><dd>{work.role}</dd></dl></section>
+      <section><h2>工夫した点</h2><ul>{work.highlights.map((h) => <li><b>{h.title}</b>{h.body}</li>)}</ul></section>
+      <section class="wp-trash"><h2>削ったこと</h2><ul>{work.trimmed.map((t) => <li><b>{t.name.replace(/\.[A-Za-z]+$/, '')}</b>{t.why}</li>)}</ul></section>
+      <div class="wp-links">
+        {work.links.map((l) => (l.href ? <a class="wp-btn wp-btn-primary" href={l.href} target="_blank" rel="noopener">{l.label}</a> : <span class="wp-soon">{l.label}（準備中）</span>))}
+        <a class="wp-btn" href={`/?case=${work.slug}`}>デスクトップで開く</a>
+      </div>
+    </main>
+  </div>
+</Base>

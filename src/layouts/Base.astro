@@ -1,0 +1,29 @@
+---
+interface Props { title: string; description: string; bodyClass?: string }
+const { title, description, bodyClass } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Inter+Tight:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    <!-- JS が動く環境だけ、ウィンドウを閉じた状態から始める（動かない環境では中身を縦に並べて見せる） -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

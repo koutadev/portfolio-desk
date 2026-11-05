@@ -1,0 +1,66 @@
+---
+// アプリのアイコン（角の丸い四角に光沢）。kind で絵柄を切り替える
+import type { IconKind } from '../data/site';
+interface Props { kind: IconKind; size?: number }
+const { kind, size = 56 } = Astro.props;
+const g = `ai-${kind}`;
+---
+<svg class="app-icon" aria-hidden="true" width={size} height={size} viewBox="0 0 100 100">
+  <defs>
+    <clipPath id={`${g}-clip`}><path d="M50 0C88 0 100 12 100 50S88 100 50 100 0 88 0 50 12 0 50 0Z" /></clipPath>
+    {kind === 'about' && <linearGradient id={g} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" /><stop offset="1" stop-color="#ECEEEF" /></linearGradient>}
+    {kind === 'works' && <linearGradient id={g} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CC4FF" /><stop offset="1" stop-color="#2F7FE8" /></linearGradient>}
+    {kind === 'skills' && <linearGradient id={g} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9A72" /><stop offset="1" stop-color="#E5482A" /></linearGradient>}
+    {kind === 'contact' && <linearGradient id={g} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5BE39A" /><stop offset="1" stop-color="#17A15A" /></linearGradient>}
+    {kind === 'trash' && <linearGradient id={g} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F6F8" /><stop offset="1" stop-color="#C3CAD1" /></linearGradient>}
+    {kind === 'case' && <linearGradient id={g} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9C8FFF" /><stop offset="1" stop-color="#5642DA" /></linearGradient>}
+  </defs>
+  <g clip-path={`url(#${g}-clip)`}>
+    <rect width="100" height="100" fill={`url(#${g})`} />
+    {kind === 'about' && (
+      <>
+        <rect width="100" height="26" fill="#F7C948" />
+        <rect y="26" width="100" height="2" fill="#E2B33A" />
+        <path d="M18 44h64M18 56h64M18 68h64M18 80h40" stroke="#C9CED3" stroke-width="3" stroke-linecap="round" />
+        <text x="76" y="86" text-anchor="middle" font-family="Inter Tight, sans-serif" font-size="18" font-weight="800" fill="#2B44F5">k</text>
+      </>
+    )}
+    {kind === 'works' && (
+      <>
+        <path d="M16 30a6 6 0 0 1 6-6h18l7 7h31a6 6 0 0 1 6 6v6H16z" fill="#D6ECFF" />
+        <rect x="16" y="38" width="68" height="42" rx="6" fill="#FFFFFF" opacity=".95" />
+        <path d="M28 52h44" stroke="#7CC4FF" stroke-width="3" stroke-linecap="round" />
+      </>
+    )}
+    {kind === 'skills' && (
+      <>
+        <rect x="18" y="24" width="64" height="52" rx="8" fill="#FFFFFF" />
+        <path d="M40 40l-10 10 10 10M60 40l10 10-10 10M54 36l-8 28" fill="none" stroke="#E5482A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      </>
+    )}
+    {kind === 'contact' && (
+      <>
+        <path d="M50 22c19 0 32 11 32 25S69 72 50 72c-4 0-8-.5-11-1.5L24 78l4-13c-5-5-10-11-10-18 0-14 13-25 32-25z" fill="#FFFFFF" />
+        <circle cx="38" cy="47" r="4" fill="#17A15A" /><circle cx="50" cy="47" r="4" fill="#17A15A" /><circle cx="62" cy="47" r="4" fill="#17A15A" />
+      </>
+    )}
+    {kind === 'trash' && (
+      <>
+        <path d="M36 34l4-12 9 3-3 10" fill="#F7C948" />
+        <path d="M52 33l8-11 8 6-6 7" fill="#7CC4FF" />
+        <path d="M44 33l2-9h9l-1 9" fill="#FFFFFF" stroke="#C3CAD1" stroke-width="1" />
+        <rect x="24" y="31" width="52" height="7" rx="3" fill="#5A6470" />
+        <path d="M29 40h42l-4 40a5 5 0 0 1-5 4H38a5 5 0 0 1-5-4z" fill="#FFFFFF" fill-opacity=".55" stroke="#5A6470" stroke-width="3" stroke-linejoin="round" />
+        <path d="M42 48v28M50 48v28M58 48v28" stroke="#5A6470" stroke-width="2.5" stroke-linecap="round" />
+      </>
+    )}
+    {kind === 'case' && (
+      <>
+        <rect x="18" y="24" width="64" height="52" rx="6" fill="#FFFFFF" />
+        <rect x="18" y="24" width="64" height="11" rx="6" fill="#E3DEFF" />
+        <rect x="25" y="42" width="24" height="26" rx="3" fill="#9C8FFF" />
+        <path d="M55 45h20M55 53h16M55 61h20" stroke="#C9C2FF" stroke-width="3" stroke-linecap="round" />
+      </>
+    )}
+  </g>
+</svg>

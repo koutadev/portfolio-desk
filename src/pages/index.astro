@@ -1,0 +1,250 @@
+---
+import Base from '../layouts/Base.astro';
+import Win from '../components/Win.astro';
+import AppIcon from '../components/AppIcon.astro';
+import { profile, skills, works, trashReadme } from '../data/site';
+import type { IconKind } from '../data/site';
+import '../styles/desktop.css';
+
+const apps: { id: IconKind; label: string }[] = [
+  { id: 'about', label: 'はじめに' },
+  { id: 'works', label: '制作物' },
+  { id: 'skills', label: 'スキル' },
+  { id: 'contact', label: '連絡する' },
+  { id: 'trash', label: 'ゴミ箱' },
+];
+const tagColors = ['#3E9BF0', '#F5B82E', '#34C759', '#AF52DE'];
+const trashData = {
+  readme: trashReadme,
+  folders: works.map((w, i) => ({ id: w.slug, name: w.title, color: tagColors[i % tagColors.length], files: w.trimmed })),
+};
+const description = `${profile.handle}（${profile.role}）のポートフォリオ。${profile.lead}`;
+---
+<Base title={`${profile.handle} — ポートフォリオ`} description={description}>
+  <div class="d-root" id="d-root">
+    <!-- メニューバー -->
+    <header class="d-menubar">
+      <button type="button" class="d-brand-btn" id="d-brand" aria-haspopup="dialog" aria-expanded="false" aria-controls="d-info">
+        <span class="d-brand-mark" aria-hidden="true">k</span>{profile.handle}<span class="sr">（このポートフォリオについて）</span>
+      </button>
+      <nav class="d-menu-nav" aria-label="ウィンドウを開く">
+        {apps.filter((a) => a.id !== 'trash').map((a) => <button type="button" class="d-menu-btn" data-open={a.id}>{a.label}</button>)}
+      </nav>
+      <span class="d-dwell"><span class="d-dwell-dot" aria-hidden="true"></span><span id="d-dwell">滞在 1分未満・朝</span></span>
+      <button type="button" class="d-menu-btn d-mode-btn" id="d-mode" aria-pressed="false">
+        <svg aria-hidden="true" width="12" height="16" viewBox="0 0 12 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="10" height="14" rx="2.5" /><path d="M4.5 3h3" stroke-linecap="round" /></svg>
+        <span id="d-mode-label">スマホで表示</span>
+      </button>
+      <time class="d-clock" id="d-clock-menu"></time>
+    </header>
+
+    <div class="d-stage">
+      <!-- スマホ表示の説明（PCで枠を出したときだけ） -->
+      <div class="d-phone-side">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:#9AA3AB">PREVIEW — iPhone</p>
+        <h2 style="font-size:30px;font-weight:900;line-height:1.4">スマホでの見え方</h2>
+        <p style="color:#C3CAD1">スマホで開くと、デスクトップはホーム画面に変わります。アプリを押すと、ウィンドウが下からせり上がって全画面で開きます。</p>
+        <button type="button" class="btn" data-act="mode" style="align-self:flex-start;border-radius:999px">PCの表示に戻る</button>
+      </div>
+
+      <div class="d-phone">
+        <div class="d-screen" id="d-screen">
+          <span class="d-island" aria-hidden="true"></span>
+          <div class="d-wallpaper" id="d-wallpaper" aria-hidden="true">
+            <div class="d-blob d-blob1"></div><div class="d-blob d-blob2"></div><div class="d-blob d-blob3"></div>
+            <div class="d-mesh"></div><div class="d-grains"></div>
+          </div>
+
+          <main class="d-desk" id="d-desk">
+            <h1 class="sr">{profile.handle} — {profile.role}のポートフォリオ</h1>
+
+            <!-- スマホのホーム画面だけのウィジェット -->
+            <div class="d-sp-only" style="flex-direction:column;align-items:center;gap:4px;color:#FFFFFF;text-align:center">
+              <time id="d-clock-big" style="font-size:76px;font-weight:300;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;text-shadow:0 2px 12px rgba(0,0,0,.25)"></time>
+              <span id="d-date-big" style="font-size:16px;font-weight:500;text-shadow:0 1px 6px rgba(0,0,0,.3)"></span>
+              <div style="margin-top:20px;width:100%;padding:16px 18px;border-radius:22px;background:rgba(255,255,255,.18);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);display:flex;align-items:center;gap:12px;text-align:left">
+                <span style="flex:1;font-size:14px;line-height:1.6">
+                  <button type="button" data-act="info" aria-haspopup="dialog" style="display:block;padding:0;border:0;background:none;font-size:15px;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer">{profile.handle}</button>
+                  {profile.role}
+                </span>
+                <button type="button" data-open="contact" style="flex:none;min-height:44px;padding:0 16px;border:0;border-radius:999px;background:rgba(255,255,255,.92);color:#15191C;font-size:13px;font-weight:700;cursor:pointer">連絡する</button>
+              </div>
+            </div>
+
+            <ul class="d-icons" aria-label="アプリ">
+              {apps.map((a) => (
+                <li>
+                  <button type="button" class="d-icon" data-open={a.id} aria-pressed="false">
+                    <AppIcon kind={a.id} size={56} />
+                    <span class="d-icon-label">{a.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <div class="d-hint" id="d-hint" role="note">
+              <p>アイコンを押すとウィンドウが開きます。タイトルをつかむと動かせます（矢印キーでも動きます）。ゴミ箱には、作品ごとに「削ったこと」が入っています。</p>
+              <button type="button" class="d-x" data-act="hint" aria-label="案内を閉じる"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8" /></svg></button>
+            </div>
+
+            <p class="d-wall" aria-hidden="true">迷わない画面を、<br />バックエンドから。</p>
+            <p class="sr" id="d-move-desc">矢印キーで移動、Shift と一緒に押すと大きく移動します。</p>
+
+            <!-- はじめに -->
+            <Win id="about" title="はじめに.txt" label="はじめに" x={150} y={50} w={540}>
+              <div class="w-pad">
+                <p class="w-lead">{profile.handle}<br /><span>{profile.role}</span></p>
+                <p style="margin:0">{profile.lead}</p>
+                <p class="w-h">経歴</p>
+                <dl class="w-dl">
+                  {profile.experience.map((e) => (<><dt>{e.term}</dt><dd>{e.body}</dd></>))}
+                </dl>
+                <p class="w-h">得意なこと</p>
+                <ul class="w-list">
+                  {profile.strengths.map((s) => <li><b>{s.title}</b>{s.body}</li>)}
+                </ul>
+                <div class="w-btns">
+                  <button type="button" class="btn btn-primary" data-open="works">制作物を開く</button>
+                  <button type="button" class="btn" data-open="trash">削ったことを見る</button>
+                </div>
+              </div>
+            </Win>
+
+            <!-- 制作物 -->
+            <Win id="works" title={`制作物 — ${works.length}項目`} label="制作物" x={580} y={170} w={640}>
+              <div class="w-pad">
+                <p class="w-note">作品を開くと、新しいウィンドウで詳しく表示します。</p>
+                <ul class="w-works">
+                  {works.map((w) => (
+                    <li>
+                      <a class="w-work-btn" href={`/works/${w.slug}/`} data-case={w.slug} style="text-decoration:none">
+                        <span class="w-thumb" style={`background:${w.thumb}`} aria-hidden="true"><span></span></span>
+                        <span class="w-work-title">{w.title}</span>
+                        <span class="w-work-kind">{w.kind}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Win>
+
+            <!-- 作品の詳細（開いた作品のパネルだけを表示） -->
+            <Win id="case" title="作品" label="作品" x={660} y={90} w={600}>
+              {works.map((w) => (
+                <article class="w-pad" data-case-panel={w.slug} aria-label={w.title}>
+                  <div class="c-hero" style={`background:${w.thumb}`} aria-hidden="true"><div><i></i><i></i><i></i></div></div>
+                  <div>
+                    <p class="c-kind">{w.kind}　·　{w.role}</p>
+                    <p class="c-title">{w.title}</p>
+                  </div>
+                  <p style="margin:0">{w.summary}</p>
+                  <dl class="w-dl"><dt>使用技術</dt><dd>{w.stack.join('、')}</dd></dl>
+                  <ul class="w-list">{w.highlights.map((h) => <li><b>{h.title}</b>{h.body}</li>)}</ul>
+                  <div class="c-links">
+                    {w.links.map((l) => (l.href ? <a class="btn" href={l.href} target="_blank" rel="noopener">{l.label}</a> : <span class="c-soon">{l.label}（準備中）</span>))}
+                    <a class="btn" href={`/works/${w.slug}/`}>作品のページ</a>
+                  </div>
+                </article>
+              ))}
+            </Win>
+
+            <!-- スキル -->
+            <Win id="skills" title="スキル.pdf" label="スキル" x={1000} y={70} w={380}>
+              <div class="w-pad">
+                {skills.map((g) => (<><p class="w-h">{g.group}</p><ul class="chips">{g.items.map((i) => <li>{i}</li>)}</ul></>))}
+              </div>
+            </Win>
+
+            <!-- 連絡する -->
+            <Win id="contact" title="新しいメッセージ" label="連絡する" x={260} y={280} w={460}>
+              <div class="w-pad">
+                <div id="contact-done" hidden>
+                  <p style="margin:0 0 8px;font-size:20px;font-weight:900">メッセージを受け付けました。</p>
+                  <p style="margin:0 0 12px">内容を確認して、入力いただいたメールアドレスへ返信します。</p>
+                  <button type="button" class="btn" data-act="contact-reset">もう一件送る</button>
+                </div>
+                <form class="f-form" id="contact-form" action="/api/contact" method="post" novalidate>
+                  <p class="w-note"><span class="f-req" aria-hidden="true">*</span> は必須です</p>
+                  <div class="f-field">
+                    <label for="f-name">お名前 <span class="f-req" aria-hidden="true">*</span></label>
+                    <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="f-name-err" />
+                    <p class="f-err" id="f-name-err" hidden>お名前を入力してください</p>
+                  </div>
+                  <div class="f-field">
+                    <label for="f-mail">メールアドレス <span class="f-req" aria-hidden="true">*</span></label>
+                    <input id="f-mail" name="email" type="email" autocomplete="email" required maxlength="200" aria-describedby="f-mail-err" />
+                    <p class="f-err" id="f-mail-err" hidden>メールアドレスの形で入力してください（例：name@example.com）</p>
+                  </div>
+                  <div class="f-field">
+                    <label for="f-msg">ご用件 <span class="f-req" aria-hidden="true">*</span></label>
+                    <textarea id="f-msg" name="message" rows="4" required maxlength="4000" aria-describedby="f-msg-err"></textarea>
+                    <p class="f-err" id="f-msg-err" hidden>ご用件を入力してください</p>
+                  </div>
+                  <div class="f-hp" aria-hidden="true"><label for="f-web">ウェブサイト</label><input id="f-web" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+                  <p class="f-err" id="f-send-err" role="alert" hidden></p>
+                  <button type="submit" class="btn btn-primary" id="f-submit">送信する</button>
+                </form>
+              </div>
+            </Win>
+
+            <!-- ゴミ箱（Finder 風。中身は scripts/desktop.ts が組み立てる） -->
+            <Win id="trash" title="ゴミ箱 — 削ったこと" label="ゴミ箱" x={240} y={80} w={940}>
+              <div id="finder">
+                <div class="fd-fallback">
+                  <p style="margin:0 0 12px">{trashReadme.why}</p>
+                  {works.map((w) => (
+                    <>
+                      <p class="w-h">{w.title}</p>
+                      <ul class="w-list">{w.trimmed.map((t) => <li><b>{t.name}</b>{t.why}</li>)}</ul>
+                    </>
+                  ))}
+                </div>
+              </div>
+            </Win>
+
+            <!-- このポートフォリオについて -->
+            <section class="d-info" id="d-info" role="dialog" aria-labelledby="d-info-title" hidden>
+              <div class="d-info-lights"><button type="button" class="d-info-close" id="d-info-close" data-act="info-close" aria-label="閉じる"><svg aria-hidden="true" width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1.5 1.5l5 5M6.5 1.5l-5 5" /></svg></button><span aria-hidden="true"></span><span aria-hidden="true"></span></div>
+              <svg aria-hidden="true" width="104" height="104" viewBox="0 0 100 100" style="display:block;margin:14px auto 12px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.25))"><defs><linearGradient id="d-brand-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B3036" /><stop offset="1" stop-color="#101315" /></linearGradient></defs><path d="M50 0C88 0 100 12 100 50S88 100 50 100 0 88 0 50 12 0 50 0Z" fill="url(#d-brand-g)" /><text x="50" y="68" text-anchor="middle" font-family="Inter Tight, sans-serif" font-size="54" font-weight="800" fill="#FFFFFF">k</text></svg>
+              <h2 id="d-info-title">{profile.handle}</h2>
+              <p class="d-info-sub">{profile.role}</p>
+              <dl>
+                <dt>名前</dt><dd>{profile.handle}</dd>
+                <dt>拠点</dt><dd>{profile.location}</dd>
+                <dt>得意なこと</dt><dd>{profile.strengths.map((s) => s.title).join('、')}</dd>
+                <dt>このサイト</dt><dd>Astro・TypeScript（動きは外部ライブラリなし）</dd>
+                <dt>GitHub</dt><dd><a href={profile.github} target="_blank" rel="noopener">{profile.github.replace('https://', '')}</a></dd>
+              </dl>
+              <button type="button" class="d-info-btn" data-open="contact">連絡する…</button>
+              <p class="d-info-copy">© {profile.handle}</p>
+            </section>
+
+            <!-- ドック -->
+            <nav class="d-dock" aria-label="ドック">
+              {apps.map((a) => (
+                <>
+                  {a.id === 'trash' && <span class="d-dock-sep" aria-hidden="true"></span>}
+                  <button type="button" class="d-dock-btn" id={`dock-${a.id}`} data-open={a.id} aria-label={a.label}>
+                    <AppIcon kind={a.id} size={52} />
+                    <span class="d-dock-dot" aria-hidden="true"></span>
+                  </button>
+                </>
+              ))}
+            </nav>
+
+            <div class="d-toast" id="d-toast" hidden>
+              <AppIcon kind="contact" size={36} />
+              <div><p style="font-weight:700">メッセージを受け付けました</p><p style="color:#4F575C">返信までしばらくお待ちください。</p></div>
+            </div>
+            <p class="sr" role="status" id="d-status"></p>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" id="trash-data" set:html={JSON.stringify(trashData)} />
+  <script>
+    import { initDesktop } from '../scripts/desktop';
+    initDesktop();
+  </script>
+</Base>
