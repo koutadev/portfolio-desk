@@ -102,9 +102,10 @@ export const works: Work[] = [
       { title: 'アクセシビリティ', body: 'すべてのパーツをキーボード操作・読み上げ・「動きを減らす」設定に対応させました。' },
     ],
     links: [
-      { label: 'カタログを見る', href: null },
+      { label: 'カタログを見る', href: 'https://designs-sigma-lac.vercel.app/parts/' },
     ],
     thumb: '#DCE3D8',
+    shot: { src: '/works/lp-catalog.webp', alt: 'LPパーツカタログの一覧画面。パーツ数などの数字と、用途・種別・トーンの絞り込み、パーツのプレビューが並ぶ' },
     trimmed: [
       { name: 'ヒーローのスライダー.mov', ext: 'MOV', why: 'PC では矢印の操作に気を取られて押されにくいという調査があり、1枚の写真と見出しを基本にしました。', saved: 'パーツ 1つと読み込みの重さ' },
       { name: '常設のチャット.app', ext: 'APP', why: 'BtoB サイトの利用者はほとんど使っていないという調査結果から、パーツにしませんでした。', saved: 'パーツ 1つ' },
@@ -124,9 +125,11 @@ export const works: Work[] = [
       { title: 'CSS でできることは CSS で', body: 'スクロール連動やページ遷移は CSS で動かし、対応していないブラウザだけ JS で補います。' },
     ],
     links: [
-      { label: 'サイト案を見る', href: null },
+      { label: '動きを試す', href: 'https://designs-sigma-lac.vercel.app/parts/#motion' },
+      { label: '篩のサイト案（5案）', href: 'https://designs-sigma-lac.vercel.app/furui/' },
     ],
     thumb: '#DCD7E8',
+    shot: { src: '/works/lp-motion.webp', alt: '篩のサイト案（デスクトップ型）。ウィンドウとドック、アプリのアイコンが並ぶ画面' },
     trimmed: [
       { name: 'しまったウィンドウを元に戻す処理.txt', ext: 'TXT', why: '戻したあとにウィンドウが動かせなくなる不具合の元だったため、「しまったときのボタンの位置に新しく開く」形に作り直しました。', saved: '壊れやすい状態の管理' },
       { name: 'ふつうの表示への切り替え.html', ext: 'HTML', why: 'デスクトップの世界観を崩さずに済むよう、「スマホで表示」に置き換えました。', saved: '一覧ページ 1つ' },
