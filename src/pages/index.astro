@@ -21,6 +21,40 @@ const trashData = {
 const description = `${profile.handle}（${profile.role}）のポートフォリオ。${profile.lead}`;
 ---
 <Base title={`${profile.handle} — ポートフォリオ`} description={description}>
+  <!-- 起動時のログイン画面（最初の1回だけ・約1.3秒。クリックかキー入力で飛ばせる。読み上げには出さない） -->
+  <div class="d-login" id="d-login" aria-hidden="true">
+    <div class="d-login-clock">
+      <span id="d-login-date"></span>
+      <time id="d-login-time"></time>
+    </div>
+    <div class="d-login-user">
+      <span class="d-login-avatar">k</span>
+      <span class="d-login-name">{profile.handle}</span>
+      <span class="d-login-field">
+        <span class="d-login-dots"><i></i><i></i><i></i><i></i></span>
+        <span class="d-login-go"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+      </span>
+      <span class="d-login-welcome">Welcome</span>
+    </div>
+    <span class="d-login-skip">クリック・キー入力でスキップ</span>
+  </div>
+  <!-- 描画より前に、ログイン画面を出すかどうかを決める（ちらつき防止）。
+       出さないとき：2回目以降（同じタブ）・?case= / ?open= で直接来たとき・「動きを減らす」設定・JS が動かない環境
+       確認用：?login を付けると毎回出る -->
+  <script is:inline>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      if (!q.has('login')) {
+        if (q.has('case') || q.has('open')) return;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        try { if (sessionStorage.getItem('d-login-seen')) return; } catch (e) {}
+      }
+      document.documentElement.classList.add('is-login');
+      var n = new Date();
+      document.getElementById('d-login-time').textContent = n.getHours() + ':' + String(n.getMinutes()).padStart(2, '0');
+      document.getElementById('d-login-date').textContent = n.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'long' });
+    })();
+  </script>
   <div class="d-root" id="d-root">
     <!-- メニューバー -->
     <header class="d-menubar">
@@ -262,7 +296,8 @@ const description = `${profile.handle}（${profile.role}）のポートフォリ
   </div>
   <script type="application/json" id="trash-data" set:html={JSON.stringify(trashData)} />
   <script>
-    import { initDesktop } from '../scripts/desktop';
+    import { initDesktop, initLogin } from '../scripts/desktop';
+    initLogin();
     initDesktop();
   </script>
 </Base>

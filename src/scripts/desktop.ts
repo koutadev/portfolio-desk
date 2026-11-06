@@ -17,6 +17,42 @@ const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = doc
 const esc = (s: string): string => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string);
 const reduced = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/**
+ * 起動時のログイン画面
+ * - 出すかどうかは index.astro のインラインスクリプトが先に決めている（<html class="is-login">）
+ * - 約1.3秒で自動で消える。クリック・タップ・キー入力ですぐ飛ばせる
+ * - 一度見たら同じタブでは出さない（sessionStorage）
+ */
+export function initLogin(): void {
+  const html = document.documentElement;
+  const el = document.getElementById('d-login');
+  if (!el) return;
+  if (!html.classList.contains('is-login')) { el.remove(); return; }
+
+  let done = false;
+  const end = (): void => {
+    if (!el.isConnected) return;
+    html.classList.remove('is-login');
+    el.remove();
+  };
+  const finish = (): void => {
+    if (done) return;
+    done = true;
+    window.clearTimeout(timer);
+    window.removeEventListener('pointerdown', onSkip, true);
+    window.removeEventListener('keydown', onSkip, true);
+    try { sessionStorage.setItem('d-login-seen', '1'); } catch { /* 保存できない環境でも表示は続ける */ }
+    el.classList.add('is-leaving');
+    el.addEventListener('animationend', end, { once: true });
+    window.setTimeout(end, 700); // animationend が来ない環境の保険
+  };
+  // 飛ばすためのキー入力は、下のデスクトップ（Esc でウィンドウを閉じる等）に渡さない
+  const onSkip = (e: Event): void => { if (e.type === 'keydown') { e.preventDefault(); e.stopPropagation(); } finish(); };
+  const timer = window.setTimeout(finish, 1300);
+  window.addEventListener('pointerdown', onSkip, true);
+  window.addEventListener('keydown', onSkip, true);
+}
+
 export function initDesktop(): void {
   const root = $('#d-root');
   const desk = $('#d-desk');
