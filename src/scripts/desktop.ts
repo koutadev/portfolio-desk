@@ -20,7 +20,7 @@ const reduced = (): boolean => window.matchMedia('(prefers-reduced-motion: reduc
 /**
  * 起動時のログイン画面
  * - 出すかどうかは index.astro のインラインスクリプトが先に決めている（<html class="is-login">）
- * - 約1.3秒で自動で消える。クリック・タップ・キー入力ですぐ飛ばせる
+ * - 約2秒で自動で消える。クリック・タップ・キー入力ですぐ飛ばせる
  * - 一度見たら同じタブでは出さない（sessionStorage）
  */
 export function initLogin(): void {
@@ -48,7 +48,7 @@ export function initLogin(): void {
   };
   // 飛ばすためのキー入力は、下のデスクトップ（Esc でウィンドウを閉じる等）に渡さない
   const onSkip = (e: Event): void => { if (e.type === 'keydown') { e.preventDefault(); e.stopPropagation(); } finish(); };
-  const timer = window.setTimeout(finish, 1300);
+  const timer = window.setTimeout(finish, 2000);
   window.addEventListener('pointerdown', onSkip, true);
   window.addEventListener('keydown', onSkip, true);
 }
